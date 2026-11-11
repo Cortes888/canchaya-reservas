@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CanchaYa · Fútbol 5</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23143d2a'/><text x='50' y='66' font-size='46' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'>CY</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="marca">
+      <span class="logo" aria-hidden="true">CY</span>
+      <div>
+        <strong>CanchaYa</strong>
+        <small>Fútbol 5 · Medellín y Envigado</small>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Secciones">
+      <button class="tab activa" data-vista="agenda">Agenda</button>
+      <button class="tab" data-vista="reservas">Reservas</button>
+      <button class="tab" data-vista="clientes">Clientes</button>
+      <button class="tab" data-vista="canchas">Canchas</button>
+      <button class="tab" data-vista="sedes">Sedes</button>
+      <button class="tab" data-vista="panel">Reportes</button>
+    </nav>
+    <span class="hoy" id="hoy-texto"></span>
+  </header>
+
+  <main>
+    <!-- Agenda -->
+    <section id="vista-agenda" class="vista activa">
+      <div class="encabezado">
+        <h1>Agenda del día</h1>
+        <form id="filtros-agenda" class="filtros">
+          <label>Sede <select name="sedeId" class="sel-sedes"></select></label>
+          <div class="navegar-fecha">
+            <button type="button" class="btn" data-dias="-1" aria-label="Día anterior">‹</button>
+            <input type="date" name="fecha" aria-label="Fecha">
+            <button type="button" class="btn" data-dias="1" aria-label="Día siguiente">›</button>
+            <button type="button" class="btn" id="agenda-hoy">Hoy</button>
+          </div>
+        </form>
+      </div>
+      <div class="agenda-info">
+        <p id="agenda-resumen" class="nota"></p>
+        <div class="leyenda">
+          <span><i class="muestra pendiente"></i>Pendiente de pago</span>
+          <span><i class="muestra confirmada"></i>Pagada</span>
+          <span><i class="muestra completada"></i>Jugada</span>
+          <span><i class="muestra pico"></i>Tarifa pico</span>
+        </div>
+      </div>
+      <div id="agenda" class="agenda-contenedor"></div>
+    </section>
+
+    <!-- Reservas -->
+    <section id="vista-reservas" class="vista">
+      <div class="encabezado">
+        <h1>Reservas</h1>
+        <button class="btn primario" id="btn-nueva-reserva">+ Nueva reserva</button>
+      </div>
+      <form id="filtros-reservas" class="filtros">
+        <label>Desde <input type="date" name="desde"></label>
+        <label>Hasta <input type="date" name="hasta"></label>
+        <label>Sede <select name="sedeId" class="sel-sedes" data-todas="Todas"></select></label>
+        <label>Estado
+          <select name="estado">
+            <option value="">Todos</option>
+            <option value="pendiente">Pendiente de pago</option>
+            <option value="confirmada">Pagada</option>
+            <option value="completada">Jugada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </label>
+        <label>Orden
+          <select name="orden">
+            <option value="asc">Próximas primero</option>
+            <option value="desc">Más recientes primero</option>
+          </select>
+        </label>
+        <label>Buscar <input type="search" name="buscar" placeholder="Código, cliente o equipo"></label>
+        <input type="hidden" name="clienteId">
+        <button type="submit" class="btn">Filtrar</button>
+        <button type="reset" class="btn sutil">Limpiar</button>
+      </form>
+      <div id="aviso-cliente" class="aviso" hidden></div>
+      <div id="tabla-reservas" class="tabla-contenedor"></div>
+    </section>
+
+    <!-- Clientes -->
+    <section id="vista-clientes" class="vista">
+      <div class="encabezado">
+        <h1>Clientes</h1>
+        <button class="btn primario" id="btn-nuevo-cliente">+ Nuevo cliente</button>
+      </div>
+      <form id="filtros-clientes" class="filtros">
+        <label>Buscar <input type="search" name="buscar" placeholder="Nombre, equipo, documento o teléfono"></label>
+        <button type="submit" class="btn">Buscar</button>
+        <button type="reset" class="btn sutil">Limpiar</button>
+      </form>
+      <div id="tabla-clientes" class="tabla-contenedor"></div>
+    </section>
+
+    <!-- Canchas -->
+    <section id="vista-canchas" class="vista">
+      <div class="encabezado">
+        <h1>Canchas de fútbol 5</h1>
+        <button class="btn primario" id="btn-nueva-cancha">+ Nueva cancha</button>
+      </div>
+      <form id="filtros-canchas" class="filtros">
+        <label>Sede <select name="sedeId" class="sel-sedes" data-todas="Todas"></select></label>
+        <label>Cubierta
+          <select name="techada">
+            <option value="">Todas</option>
+            <option value="true">Techada</option>
+            <option value="false">Al aire libre</option>
+          </select>
+        </label>
+        <label>Nombre <input type="search" name="buscar"></label>
+        <button type="submit" class="btn">Filtrar</button>
+        <button type="reset" class="btn sutil">Limpiar</button>
+      </form>
+      <p class="nota" id="nota-tarifas"></p>
+      <div id="tabla-canchas" class="tabla-contenedor"></div>
+    </section>
+
+    <!-- Sedes -->
+    <section id="vista-sedes" class="vista">
+      <div class="encabezado">
+        <h1>Sedes</h1>
+        <button class="btn primario" id="btn-nueva-sede">+ Nueva sede</button>
+      </div>
+      <form id="filtros-sedes" class="filtros">
+        <label>Nombre <input type="search" name="buscar"></label>
+        <label>Ciudad <input type="search" name="ciudad"></label>
+        <button type="submit" class="btn">Filtrar</button>
+        <button type="reset" class="btn sutil">Limpiar</button>
+      </form>
+      <div id="tabla-sedes" class="tabla-contenedor"></div>
+    </section>
+
+    <!-- Reportes -->
+    <section id="vista-panel" class="vista">
+      <div class="encabezado">
+        <h1>Reportes</h1>
+        <form id="filtros-panel" class="filtros">
+          <label>Desde <input type="date" name="desde"></label>
+          <label>Hasta <input type="date" name="hasta"></label>
+          <label>Sede <select name="sedeId" class="sel-sedes" data-todas="Todas las sedes"></select></label>
+          <button type="submit" class="btn">Aplicar</button>
+        </form>
+      </div>
+
+      <div id="kpis" class="kpis"></div>
+
+      <div class="rejilla">
+        <article class="tarjeta ancho">
+          <h2>Ocupación por sede</h2>
+          <p class="nota" id="nota-ocupacion">Horas vendidas sobre horas disponibles.</p>
+          <div id="rep-ocupacion" class="desplazable"></div>
+        </article>
+        <article class="tarjeta">
+          <h2>Horas pico</h2>
+          <p class="nota">Horas reservadas por franja (sin canceladas).</p>
+          <div id="rep-horas" class="barras"></div>
+        </article>
+        <article class="tarjeta">
+          <h2>Día de la semana</h2>
+          <p class="nota">Reservas por día (sin canceladas).</p>
+          <div id="rep-dias" class="barras"></div>
+        </article>
+        <article class="tarjeta">
+          <h2>Canchas más reservadas</h2>
+          <div id="rep-canchas" class="desplazable"></div>
+        </article>
+        <article class="tarjeta">
+          <h2>Clientes frecuentes</h2>
+          <div id="rep-clientes" class="desplazable"></div>
+        </article>
+        <article class="tarjeta ancho">
+          <h2>Ingresos por sede y mes</h2>
+          <p class="nota">Según la fecha real de cada pago. Incluye abonos retenidos por cancelaciones tardías.</p>
+          <div id="rep-ingresos" class="desplazable"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Ventana para formularios -->
+  <dialog id="modal">
+    <form id="modal-form" method="dialog" novalidate>
+      <header>
+        <h2 id="modal-titulo"></h2>
+        <button type="button" class="cerrar" id="modal-cerrar" aria-label="Cerrar">×</button>
+      </header>
+      <div id="modal-cuerpo"></div>
+      <p id="modal-error" class="error" role="alert"></p>
+      <footer>
+        <div id="modal-acciones" class="acciones"></div>
+        <span class="espacio"></span>
+        <button type="button" class="btn sutil" id="modal-cancelar">Cerrar</button>
+        <button type="submit" class="btn primario" id="modal-enviar">Guardar</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

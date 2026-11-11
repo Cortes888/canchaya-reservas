@@ -1,0 +1,21 @@
+{
+  "name": "reservas-canchas",
+  "version": "1.0.0",
+  "description": "Sistema de reservas de canchas deportivas - Proyecto final Bases de Datos II",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node scripts/seed.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "mongodb": "^6.10.0"
+  },
+  "license": "MIT"
+}
