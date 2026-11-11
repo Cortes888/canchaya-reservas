@@ -96,5 +96,3 @@ test/              pruebas
 | POST | `/api/reservas/:id/cancelar` |
 | POST | `/api/reservas/:id/completar` |
 | GET | `/api/reportes/resumen`, `ocupacion`, `horas-pico`, `dias-semana`, `canchas-top`, `clientes-frecuentes`, `ingresos-sede-mes` |
-
-La documentación técnica completa está en el documento entregado con el proyecto.
